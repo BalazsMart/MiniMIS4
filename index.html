@@ -56,13 +56,22 @@ div class="box" id="dashboard" style="display:none;">
     </tr>
 
     <tr>
-      <td>Lea Abdullahi</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+  <td>Lea Abdullahi</td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+</tr>
+
+<tr>
+  <td>Sofia Alexa</td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+  <td class="cell"></td>
+</tr>
 
     <tr>
       <td>Sofia Alexa</td>
@@ -82,21 +91,30 @@ div class="box" id="dashboard" style="display:none;">
 </div>
 
 <script>
-// --- Login ---
-function login() {
-  let user = document.getElementById("username").value;
-  let pass = document.getElementById("password").value;
-  let correctUser = "teacher";
-  let correctPass = "1234";
+document.addEventListener("click", function(e){
 
-  if(user === correctUser && pass === correctPass) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
-    loadStudents();
-  } else {
-    document.getElementById("errorMsg").innerText = "Incorrect username or password";
+  if(e.target.classList.contains("cell")){
+
+    let choice = prompt(
+      "Type:\nP = Present\nL = Late\nA = Absent"
+    );
+
+    if(choice === "P" || choice === "p"){
+      e.target.innerHTML = "✓";
+    }
+
+    if(choice === "L" || choice === "l"){
+      e.target.innerHTML = "L";
+    }
+
+    if(choice === "A" || choice === "a"){
+      e.target.innerHTML = "✗";
+    }
+
   }
-}
+
+});
+</script>
 
 // --- Students ---
 const students = [
