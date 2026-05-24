@@ -4,57 +4,50 @@
   <title>MiniMIS</title>
 
   <style>
-    body{
+    body {
       font-family: Arial;
-      background:#f4f6f8;
-      text-align:center;
+      background: #f4f6f8;
+      text-align: center;
     }
 
-    .box{
-      background:white;
-      padding:20px;
-      margin:20px auto;
-      width:950px;
-      border-radius:10px;
-      box-shadow:0 0 10px rgba(0,0,0,0.1);
+    .box {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 900px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    table{
-      width:100%;
-      border-collapse:collapse;
+    table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    th, td{
-      border:1px solid #ddd;
-      padding:8px;
-      font-size:12px;
-      text-align:center;
-      position:relative;
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+      position: relative;
     }
 
-    th{
-      background:#007bff;
-      color:white;
+    th {
+      background: #007bff;
+      color: white;
     }
 
-    input{
-      padding:10px;
-      width:200px;
-      margin:5px;
+    button {
+      padding: 4px 6px;
+      font-size: 10px;
+      margin: 1px;
     }
 
-    button{
-      padding:6px 10px;
-      font-size:12px;
-      margin:2px;
-      cursor:pointer;
-    }
-
-    .mark{
-      position:absolute;
-      top:2px;
-      right:3px;
-      font-size:10px;
+    .mark {
+      font-size: 10px;
+      position: absolute;
+      top: 2px;
+      right: 3px;
     }
 
   </style>
@@ -67,12 +60,12 @@
 <!-- LOGIN -->
 <div class="box" id="loginBox">
   <h3>Login</h3>
-  <input id="user" placeholder="Username"><br>
-  <input id="pass" type="password" placeholder="Password"><br>
+  <input id="user" placeholder="Username"><br><br>
+  <input id="pass" type="password" placeholder="Password"><br><br>
   <button onclick="login()">Login</button>
 </div>
 
-<!-- REGISTER -->
+<!-- DASHBOARD -->
 <div class="box" id="dashboard" style="display:none;">
   <h2>Year 7A Register</h2>
 
@@ -105,26 +98,27 @@ const students = [
 
 // LOGIN
 function login(){
-  let u=document.getElementById("user").value;
-  let p=document.getElementById("pass").value;
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
 
-  if(u==="teacher" && p==="1234"){
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("dashboard").style.display="block";
+  if(u === "teacher" && p === "1234"){
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
     load();
   } else {
     alert("Wrong login");
   }
 }
 
-// LOAD REGISTER
+// LOAD TABLE
 function load(){
-  let rows=document.getElementById("rows");
+  let rows = document.getElementById("rows");
 
-  students.forEach(name=>{
-    let tr=document.createElement("tr");
+  students.forEach(name => {
 
-    tr.innerHTML=`
+    let tr = document.createElement("tr");
+
+    tr.innerHTML = `
       <td>${name}</td>
       <td onclick="mark(this)"></td>
       <td onclick="mark(this)"></td>
@@ -137,16 +131,23 @@ function load(){
   });
 }
 
-// MARK ATTENDANCE
+// MARK
 function mark(cell){
-  let c=prompt("P=Present\nL=Late\nA=Absent");
 
-  if(c==="P") cell.innerHTML="<span class='mark'>✓</span>";
-  if(c==="L") cell.innerHTML="<span class='mark'>L</span>";
-  if(c==="A"){
-    let r=prompt("Reason: Medical / Dental / Off Site / Other");
-    cell.innerHTML="<span class='mark'>✗</span>";
-    cell.title=r;
+  let choice = prompt("P=Present\nL=Late\nA=Absent");
+
+  if(choice === "P"){
+    cell.innerHTML = "<span class='mark'>✓</span>";
+  }
+
+  else if(choice === "L"){
+    cell.innerHTML = "<span class='mark'>L</span>";
+  }
+
+  else if(choice === "A"){
+    let reason = prompt("Reason: Medical / Dental / Off Site / Other");
+    cell.innerHTML = "<span class='mark'>✗</span>";
+    cell.title = reason;
   }
 }
 
