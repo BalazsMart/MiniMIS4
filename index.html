@@ -1,51 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MiniMIS Attendance</title>
+  <title>MiniMIS Pro</title>
+
   <style>
     body {
       font-family: Arial;
       background: #f4f6f8;
       text-align: center;
     }
-    .login-box, .dashboard {
+
+    .box {
       background: white;
       padding: 20px;
-      margin: 30px auto;
-      width: 400px;
+      margin: 20px auto;
+      width: 900px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
     input {
       padding: 10px;
-      width: 90%;
+      width: 80%;
       margin: 5px;
     }
+
     button {
-      padding: 10px;
-      margin: 5px;
+      padding: 5px 8px;
+      margin: 2px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 12px;
     }
-    .present { background-color: #4CAF50; color: white; }
-    .late { background-color: #FFC107; color: white; }
-    .absent { background-color: #F44336; color: white; }
-    .student {
-      margin: 10px 0;
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
+
+    .present { background: #4CAF50; color: white; }
+    .late { background: #FFC107; color: white; }
+    .absent { background: #F44336; color: white; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 6px;
+      text-align: center;
+      position: relative;
+    }
+
+    th {
+      background: #007bff;
+      color: white;
+    }
+
+    .mark {
+      font-size: 10px;
+      position: absolute;
+      top: 2px;
+      right: 3px;
     }
   </style>
 </head>
+
 <body>
 
-<h1>🏫 MiniMIS</h1>
+<h1>🏫 MiniMIS Pro</h1>
 
-div class="box" id="dashboard" style="display:none;">
+<!-- LOGIN -->
+<div class="box" id="loginBox">
+  <h3>Login</h3>
+  <input id="user" placeholder="Username"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="box" id="dashboard" style="display:none;">
   <h2>Year 7A Register</h2>
 
-  <table border="1">
+  <table>
     <tr>
       <th>Student</th>
       <th>M</th>
@@ -55,99 +91,84 @@ div class="box" id="dashboard" style="display:none;">
       <th>F</th>
     </tr>
 
-    <tr>
-  <td>Lea Abdullahi</td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-</tr>
-
-<tr>
-  <td>Sofia Alexa</td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-  <td class="cell"></td>
-</tr>
-
-    <tr>
-      <td>Sofia Alexa</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+    <tbody id="rows"></tbody>
 
   </table>
 </div>
-<!-- Dashboard -->
-<div class="dashboard" id="dashboard" style="display:none;">
-  <h2>Attendance Dashboard</h2>
-  <div id="studentsList"></div>
-</div>
 
 <script>
-document.addEventListener("click", function(e){
 
-  if(e.target.classList.contains("cell")){
-
-    let choice = prompt(
-      "Type:\nP = Present\nL = Late\nA = Absent"
-    );
-
-    if(choice === "P" || choice === "p"){
-      e.target.innerHTML = "✓";
-    }
-
-    if(choice === "L" || choice === "l"){
-      e.target.innerHTML = "L";
-    }
-
-    if(choice === "A" || choice === "a"){
-      e.target.innerHTML = "✗";
-    }
-
-  }
-
-});
-</script>
-
-// --- Students ---
 const students = [
-  "Lea Abdullahi","Sofia Alexa","Jayden Beckley","Charlie Bergin","Caillo Bowyer",
-  "Pheobe Bistrow","Poppy Brown","Aizah Butt","Juljeta Cakiqi","Simon Donaldson",
-  "Anu Ghale","Molly Giles","Jacob Glancy","Sworup Gurung","Devon Harris",
-  "Seden Ibrahim","Ayana Joshi","Rowan Key","Alexander Ledger","Arabella Lock",
-  "Paul Marcolino","Leticia Nyitambe","Areeba Safra","Avyan Sharma","Khristana Shatokhina",
-  "Dylan Stephens","Lilly Sykes","Rex Thapa","Reem Yawermann"
+"Lea Abdullahi","Sofia Alexa","Jayden Beckley","Charlie Bergin",
+"Caillo Bowyer","Pheobe Bistrow","Poppy Brown","Aizah Butt",
+"Juljeta Cakiqi","Simon Donaldson","Anu Ghale","Molly Giles",
+"Jacob Glancy","Sworup Gurung","Devon Harris","Seden Ibrahim",
+"Ayana Joshi","Rowan Key","Alexander Ledger","Arabella Lock",
+"Paul Marcolino","Leticia Nyitambe","Areeba Safra","Avyan Sharma",
+"Khristana Shatokhina","Dylan Stephens","Lilly Sykes","Rex Thapa",
+"Reem Yawermann"
 ];
 
-function loadStudents() {
-  const container = document.getElementById("studentsList");
-  container.innerHTML = "";
+// LOGIN
+function login(){
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  if(u === "teacher" && p === "1234"){
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    load();
+  } else {
+    alert("Wrong login");
+  }
+}
+
+// LOAD TABLE
+function load(){
+  let rows = document.getElementById("rows");
+
   students.forEach(name => {
-    const studentDiv = document.createElement("div");
-    studentDiv.className = "student";
-    studentDiv.innerHTML = `
-      <strong>${name}</strong><br>
-      <button class="present" onclick="mark('${name}','Present')">Present</button>
-      <button class="late" onclick="mark('${name}','Late')">Late</button>
-      <button class="absent" onclick="mark('${name}','Absent')">Absent</button>
-      <span id="${name.replaceAll(' ','_')}_status"></span>
+
+    let tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${name}</td>
+      <td onclick="mark(this)"></td>
+      <td onclick="mark(this)"></td>
+      <td onclick="mark(this)"></td>
+      <td onclick="mark(this)"></td>
+      <td onclick="mark(this)"></td>
     `;
-    container.appendChild(studentDiv);
+
+    rows.appendChild(tr);
   });
 }
 
-// --- Attendance ---
-function mark(name, status) {
-  const statusSpan = document.getElementById(name.replaceAll(' ','_') + "_status");
-  statusSpan.innerText = ` ${status}`;
+// MARK ATTENDANCE
+function mark(cell){
+
+  let choice = prompt(
+    "P = Present\nL = Late\nA = Absent"
+  );
+
+  if(choice === "P"){
+    cell.innerHTML = "<span class='mark'>✓</span>";
+  }
+
+  else if(choice === "L"){
+    cell.innerHTML = "<span class='mark'>L</span>";
+  }
+
+  else if(choice === "A"){
+    let reason = prompt(
+      "Reason:\nMedical\nDental\nEducated Off Site\nOther"
+    );
+
+    cell.innerHTML = "<span class='mark'>✗</span>";
+    cell.title = reason;
+  }
 }
+
 </script>
 
 </body>
