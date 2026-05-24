@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>MiniMIS Pro</title>
+  <title>MiniMIS</title>
 
   <style>
     body {
@@ -19,35 +19,16 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    input {
-      padding: 10px;
-      width: 80%;
-      margin: 5px;
-    }
-
-    button {
-      padding: 5px 8px;
-      margin: 2px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .present { background: #4CAF50; color: white; }
-    .late { background: #FFC107; color: white; }
-    .absent { background: #F44336; color: white; }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
     }
 
     th, td {
       border: 1px solid #ddd;
-      padding: 6px;
+      padding: 8px;
       text-align: center;
+      font-size: 12px;
       position: relative;
     }
 
@@ -56,24 +37,31 @@
       color: white;
     }
 
+    button {
+      padding: 4px 6px;
+      font-size: 10px;
+      margin: 1px;
+    }
+
     .mark {
       font-size: 10px;
       position: absolute;
       top: 2px;
       right: 3px;
     }
+
   </style>
 </head>
 
 <body>
 
-<h1>🏫 MiniMIS Pro</h1>
+<h1>🏫 MiniMIS</h1>
 
 <!-- LOGIN -->
 <div class="box" id="loginBox">
   <h3>Login</h3>
-  <input id="user" placeholder="Username"><br>
-  <input id="pass" type="password" placeholder="Password"><br>
+  <input id="user" placeholder="Username"><br><br>
+  <input id="pass" type="password" placeholder="Password"><br><br>
   <button onclick="login()">Login</button>
 </div>
 
@@ -92,7 +80,6 @@
     </tr>
 
     <tbody id="rows"></tbody>
-
   </table>
 </div>
 
@@ -144,12 +131,10 @@ function load(){
   });
 }
 
-// MARK ATTENDANCE
+// MARK
 function mark(cell){
 
-  let choice = prompt(
-    "P = Present\nL = Late\nA = Absent"
-  );
+  let choice = prompt("P=Present\nL=Late\nA=Absent");
 
   if(choice === "P"){
     cell.innerHTML = "<span class='mark'>✓</span>";
@@ -160,10 +145,7 @@ function mark(cell){
   }
 
   else if(choice === "A"){
-    let reason = prompt(
-      "Reason:\nMedical\nDental\nEducated Off Site\nOther"
-    );
-
+    let reason = prompt("Reason: Medical / Dental / Off Site / Other");
     cell.innerHTML = "<span class='mark'>✗</span>";
     cell.title = reason;
   }
